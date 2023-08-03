@@ -1,0 +1,260 @@
+
+body{
+	background:#e5e9a6;
+	color:#06031c;
+	margin: 0px auto;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+	display: block; 
+  user-select:none;
+	}
+	
+/*
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  display: inline-block;
+  margin: 0px auto;
+  text-align: center;
+  background:#e5e9a6;
+}
+*/
+
+/*h1{text-align:center;margin:20% 0 5%;font-family:verdana;font-weight:100;}*/
+
+/*-----------------------------NAV---------------------------------*/
+#nav-panel{
+  position:relative;
+  height:48px;  /*высота*/
+  margin:0 auto;
+  border: 1px solid #333;
+  background:rgb(65 86 165);
+}
+#nav-radios-panel{
+  position:relative;
+  max-width:400px;  /*240 БАЗОВЫЙ размер !!!*/
+  height:70px;  /*размер влияет только на отступ снизу*/
+  margin:0 auto;
+  /*border: 1px solid #333;*/
+}
+.nav-inp{ /*невидимый элемент - оределяет логику работы*/
+  position:absolute;
+  right:1000%; 
+}
+/*#nav-llab{border-radius:6px 0px 0px 6px;} #nav-rlab{border-radius:0px 6px 6px 0px;}*/
+
+.nav-label{        /*подложка типа label, их 3 шт.*/
+  float:left;
+  width:33.33%; /*ширина - 1/3 от базового размера*/
+  line-height: 3em; /* вертикальный размер=(высота шрифта)*3 !!!*/
+  text-align: center;
+  user-select:none; 
+  margin:0;
+  font-family:'Arial';
+  font-size:16px; /*влияет на высоту бара- константа!!!*/
+  color:yellow;
+  font-weight: bold;
+  background:rgb(65 86 165);
+  cursor:pointer;   /*указатель при наезде мышкой*/
+}
+#nav-slider{  /*перемещаемая подсветка (верхний слой)*/
+  position:absolute;
+  left:0%; top:0;
+  width:28%;  /*ширина подсветки относительно базы*/
+  padding-bottom:36px;   /* высота подсветки - константа !!!*/
+  margin:6px 0 0 2.5%;   /*начальное положение подсветки !!!*/
+  background:#e5e9a68f;
+  border-radius:3px;
+  transition: .2s left /*.05s ease-in-out*/; /*время перемещения подсветки навигатора*/
+}
+#nav-input1:checked  ~ #nav-slider{ animation-name: ninput1; left:0; }
+#nav-input2:checked  ~ #nav-slider{ animation-name: ninput2; left:33.3%; }
+#nav-input3:checked  ~ #nav-slider{ animation-name: ninput3; left:66.6%; }
+
+/*-----------------------------Sens---------------------------------------*/
+
+.card-grid {  /*нужен для центровки внутренней панели*/
+  max-width: 800px; 
+  margin: 0 auto; 
+  display: grid; 
+  grid-gap: 2rem; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.card {       /*это основная панель, на ней все элементы*/
+  position:relative;
+  /*height:560px; */ /*высота*/
+  margin-block-start: 3%;
+  margin-left: 3%;
+  margin-right:3%;
+  border-radius:3px;
+  /*border: 1px solid #333;*/
+  background:#fbf9df;
+  box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+}
+.sys-inf {  /*параграф с системной информацией, верхняя строка*/
+	margin-block-start: 22px;
+	margin-block-end: 22px;	
+	font-size: 18px;
+	font-weight: 700;
+}
+#freemem {
+  /*border: red 2px solid;*/
+  background-color: #f7ec88;
+}
+p {
+  font-size: 1.5rem;
+}
+.sens-plab {  /* <p> 3 строки с показаниями датчиков*/
+	margin-block-start: 23px;
+	margin-block-end: 23px;	
+}
+.sensor-labels {  /* <span> 3 строки с показаниями датчиков*/
+  font-size: 1.5rem;
+  vertical-align:middle;
+  padding-bottom: 15px;
+ }
+canvas {  /*основа для графика*/
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+	/*border:black 1px solid;*/
+	background-color: #f2f3f3;
+}
+/*---------------------------------------LABELS RADIO--------------------------*/
+#radios-labels-div{  /*div квадрар для лэйблов*/
+  position:relative;
+  width:210px;  /*ширина всей панели с метками*/
+  height:22px;
+  margin:0 auto;
+  /*border: 1px solid #333;*/
+}
+.lab3s { /*сами лэйблы*/
+  float:left;
+  width:20%;
+  margin:0 6.666%; /*отступы только слева-срава !!!*/
+  font-size: 18px;
+  font-weight: bold;
+  color:blue;
+	
+}
+/*---------------------------------------PANEL RADIO--------------------------*/
+#radios-panel{
+  position:relative;
+  width:210px;  /*ширина всей панели с кнопками*/
+  height:70px;
+  margin:0 auto; 
+  /*border: 1px solid #333;*/
+}
+.inp3s {    /*radio-input (невидима)*/
+  position:absolute;
+  right:1000%;
+}
+.cont3s {        /*подложка-круглой формы тип: label, ширина: 33.333%*/
+  float:left;
+  width:20%; padding-bottom:20%; /*ширина-высота !!!*/
+  margin:0 6.666%; /*отступы только слева-срава !!!*/
+  background:#d5d4cf;/*rgb(65 86 165);*/
+  border-radius:50%; /*это круг*/
+  cursor:pointer;   /*указатель при наезде мышкой*/
+  /*margin-bottom: 30px;*/
+}
+#slider{    /*внутренний круг, который бегает*/
+  position:absolute;
+  left:0%; top:0;
+  width:15%; padding-bottom:15%;   /*величина внутреннего круга !!!*/
+  margin:2.45% 0 0 9.0%;   /*положение внутреннего относительно внешнего !!!*/
+  background:#ef6026;
+  transition:transform 1s;  /*??????????????не влияет*/
+  border-radius:50%; /*это круг*/
+  
+  /*константы для анимации*/
+  animation-timing-function: ease-in-out;
+  animation-duration:.3s; /*продолжительность трансформации*/
+  animation-fill-mode: forwards;
+  transition: 0.2s left .05s ease-in-out;  /*продолжительность и задержка перемещения*/
+}
+/*привязка анимации к событиям обьектов input1[23]*/
+#input1:checked  ~ #slider{ animation-name: a-name1; left:0; }
+#input2:checked  ~ #slider{ animation-name: a-name2; left:33.333%; }
+#input3:checked  ~ #slider{ animation-name: a-name3; left:66.666%; }
+
+/*добавление правил трансформации к идентификаторам анимации @keyframes*/
+@keyframes a-name1{ 30%, 70% { transform:scale(0.5); } }
+@keyframes a-name2{ 30%, 70% { transform:scale(0.5); } }
+@keyframes a-name3{ 30%, 70% { transform:scale(0.5); } }
+
+/*--------------------------------------Manag-------------------------------------------*/
+/*
+p {
+  font-size: 1.5rem;
+}
+*/
+label {
+  font-size: 1.2rem; 
+}
+input[type=text], input[type=number], select {
+  width: 50%;
+  padding: 8px 20px;
+  margin: 18px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1.2rem;
+}
+button {
+  border: none;
+  color: #FEFCFB;
+  background-color: #034078;
+  padding: 15px 32px;
+  text-align: center;
+  font-size: 16px;
+  width: 100px;
+  border-radius: 4px;
+  /*transition-duration: 0.4s;*/
+  margin-bottom: 36px;
+}
+.wifiman {
+  cursor: pointer;	
+}
+.wifiman:active {
+  box-shadow: 2px 2px 5px #fc894d;
+  color: #fc894d;
+}
+
+.reboot {
+  font-size: 16px;
+  background-color: #9b2920f7;
+  border-radius: 4px;
+  color: white;
+  padding: 15px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;	
+}
+.reboot:active {
+  box-shadow: 2px 2px 5px #fc894d;
+  color: #fc894d;
+}
+
+/*---------------------------------------------Calibr--------------------------------------------*/
+
+.calibr-plab {
+	/*margin-block-start: 0px;*/
+	margin-block-end: 24px;
+}
+.calibr-pbtn {
+	margin-block-start: 38px;
+	margin-block-end: 0px;
+}
+.calibr {
+  width: 250px;
+  cursor: pointer;
+  margin-bottom: 32px;
+}
+.calibr:active {
+    box-shadow: 2px 2px 5px #fc894d;
+	color: #fc894d;
+}

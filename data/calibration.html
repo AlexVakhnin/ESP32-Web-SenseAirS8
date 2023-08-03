@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Calibration SenseAir S8</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+<div id="nav-panel">
+  <div id="nav-radios-panel">
+    <label class="nav-label" id="nav-llab" for="nav-input1">Sens</label>
+    <input class="nav-inp"  id="nav-input1" name="nav-radio" type="radio"
+        onchange="navChange(this);" value="1" />
+    <label class="nav-label" for="nav-input2">Manag</label>
+    <input class="nav-inp"  id="nav-input2" name="nav-radio" type="radio"
+        onchange="navChange(this);" value="2" />
+    <label class="nav-label" id="nav-rlab" for="nav-input3">Calibr</label>
+    <input class="nav-inp"  id="nav-input3" name="nav-radio" type="radio" checked />
+    <span id="nav-slider"></span>
+  </div>
+</div>
+
+  <div class="card-grid">
+      <div class="card">        
+        <p class="calibr-plab">
+         <span class="sensor-labels">ABC calibration (hr): </span>
+         <span id="abcper"  class="sensor-labels">%abcper%</span><br><br>
+         <span class="sensor-labels">Acknowledgement : </span>
+         <span id="ackreg"  class="sensor-labels">%ackreg%</span><br><br>
+         <span class="sensor-labels">Backgr. calibration: </span>
+         <span id="calibr"  class="sensor-labels">%calibr%</span><br>
+        </p>
+        <p class="calibr-pbtn">
+		 <button type="button" class="calibr" onclick="post_res_abc()">Reset ABC period</button><br>
+		 <button type="button" class="calibr" onclick="post_set_abc()">Set ABC=180 period</button><br>
+		 <button type="button" class="calibr" onclick="post_res_ack()">Reset ACK register</button><br>
+		 <button type="button" class="calibr" onclick="post_calibration()">Calibration START</button>
+        </p>
+      </div>
+  </div>
+
+</body>
+
+<script>
+
+function navChange(src) {
+  if        ( src.value ==2 ) {
+    setTimeout(() => { 
+      window.location.replace('/wifimanager.html') ; }, 200);
+    
+  } else if ( src.value ==1 ) {
+    setTimeout(() => { 
+      window.location.replace('/') ; }, 200);
+  
+  }
+}
+
+
+function flogout() {
+//alert("OK!");
+
+logout("/calibration.html", "/");
+}
+
+function logout(secUrl, redirUrl) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", secUrl, true);
+        xmlhttp.setRequestHeader("Authorization", "Basic aW52YWxpZDoK");
+        xmlhttp.send();
+    
+        setTimeout(function () {
+             window.location.href = redirUrl;
+        }, 200);
+}
+
+
+function post_calibration(){
+
+let postObj = { 
+    calibr: 'start'  
+}
+let post = JSON.stringify(postObj)
+
+fetch("/posts", {
+    method: 'post',
+    body: post,
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+// (C) RETURN SERVER RESPONSE AS TEXT
+.then((res) => {
+   if (res.status != 200) { throw new Error("Bad Server Response"); }
+   return res.text();
+})
+// (D) SERVER RESPONSE
+.then((res) => {
+    console.log(res);
+	//alert(res);
+	//alert("Post: calibr->start");
+
+})
+// (E) HANDLE ERRORS - OPTIONAL
+.catch((error) => {
+    console.log(error)
+});
+// (F) PREVENT FORM SUBMIT
+return false;
+}
+
+
+function post_res_ack(){
+let postObj = { 
+    regack: 'res'  
+}
+let post = JSON.stringify(postObj)
+fetch("/posts", {
+    method: 'post',
+    body: post,
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+.then((res) => {
+   if (res.status != 200) { throw new Error("Bad Server Response"); }
+   return res.text();
+})
+.then((res) => {
+    console.log(res);
+})
+.catch((error) => {
+    console.log(error)
+});
+return false;
+}
+
+function post_set_abc(){
+let postObj = { 
+    regabc: 'set'  
+}
+let post = JSON.stringify(postObj)
+fetch("/posts", {
+    method: 'post',
+    body: post,
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+.then((res) => {
+   if (res.status != 200) { throw new Error("Bad Server Response"); }
+   return res.text();
+})
+.then((res) => {
+    console.log(res);
+})
+.catch((error) => {
+    console.log(error)
+});
+return false;
+}
+
+
+function post_res_abc(){
+let postObj = { 
+    regabc: 'res'  
+}
+let post = JSON.stringify(postObj)
+fetch("/posts", {
+    method: 'post',
+    body: post,
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+.then((res) => {
+   if (res.status != 200) { throw new Error("Bad Server Response"); }
+   return res.text();
+})
+.then((res) => {
+    console.log(res);
+})
+.catch((error) => {
+    console.log(error)
+});
+return false;
+}
+
+const calibr = document.getElementById('calibr');
+//calibr.style.color = "#ef2a14";
+//calibr.style.fontWeight = "bold";
+
+
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+		var myObj = JSON.parse(this.responseText);
+        document.getElementById("calibr").innerHTML = myObj.calibr;
+		  if (myObj.calibr == "ON") {calibr.style.color = "#ef2a14";calibr.style.fontWeight = "bold";}
+		  if (myObj.calibr == "OFF") {calibr.style.color = "#000";calibr.style.fontWeight = "normal";}
+		document.getElementById("ackreg").innerHTML = myObj.ackreg;
+		  if (myObj.ackreg == 32) {ackreg.style.color = "#2d9117";ackreg.style.fontWeight = "bold";}
+		  if (myObj.ackreg == 0) {ackreg.style.color = "#000";ackreg.style.fontWeight = "normal";}		
+		document.getElementById("abcper").innerHTML = myObj.abcper;
+      }
+    };
+    xhttp.open("GET", "/jsoncalibr", true);
+    xhttp.send();
+  }, 1000 ) ;
+
+</script>
+</html>

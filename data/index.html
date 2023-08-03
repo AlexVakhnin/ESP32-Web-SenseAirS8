@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title>Sensors dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="Chart.min.js"></script>
+</head>
+
+<body>
+
+<div id="nav-panel">
+  <div id="nav-radios-panel">
+    <label class="nav-label" id="nav-llab" for="nav-input1">Sens</label>
+    <input class="nav-inp"  id="nav-input1" name="nav-radio" type="radio" checked />
+    <label class="nav-label" for="nav-input2">Manag</label>
+    <input class="nav-inp"  id="nav-input2" name="nav-radio" type="radio"
+        onchange="navChange(this);" value="2" />
+    <label class="nav-label" id="nav-rlab" for="nav-input3">Calibr</label>
+    <input class="nav-inp"  id="nav-input3" name="nav-radio" type="radio"
+        onchange="navChange(this);" value="3" />
+    <span id="nav-slider"></span>
+  </div>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <p class="sys-inf">
+      <span>Sys: </span>
+      <span id="rssi">%RSSI%</span>
+	  <span id="freemem">%freemem%</span>
+      <span id="iday">0</span>
+      <span id="ihour">0</span>:<span id="imin">0</span>.<span id="isec">0</span>
+    </p>
+	
+    <p class="sens-plab">
+      <span class="sensor-labels">Humidity: </span>
+      <span id="humis"  class="sensor-labels">%humis%</span>
+      <span class="sensor-labels">&percnt;</span>
+    </p>
+    <p class="sens-plab">
+      <span class="sensor-labels">Temperature: </span>
+      <span id="temps"  class="sensor-labels">%temps%</span>
+      <span class="sensor-labels">&deg;C</span>
+    </p>
+    <p class="sens-plab">
+      <span class="sensor-labels">CO2: </span>
+      <span id="co2s"  class="sensor-labels">%co2s%</span>
+      <span class="sensor-labels"> ppm</span>
+    </p>
+  <canvas id="mycanvas" height="180" style="max-width:280px"></canvas>
+  <h4>Graph X-scale: <span id="ledstate">3 min</span></h4>
+
+   <div id="radios-labels-div">
+		<label class="lab3s" id="lab-1">3m</label>
+		<label class="lab3s" id="lab-2">1h</label>
+		<label class="lab3s" id="lab-3">9h</label>
+   </div>
+   <div id="radios-panel">
+		<label class="cont3s" for="input1"></label>
+		<input class="inp3s" id="input1" name="radio" type="radio" 
+			onchange="handleChange(this);" value="1" checked/>
+		<label class="cont3s" for="input2"></label>
+		<input class="inp3s" id="input2" name="radio" type="radio" 
+			onchange="handleChange(this);" value="2" />
+		<label class="cont3s" for="input3"></label>
+		<input class="inp3s" id="input3" name="radio" type="radio" 
+			onchange="handleChange(this);" value="3" />
+		<span id="slider"></span>
+	</div>
+
+  </div>
+</div>
+
+</body>
+
+<script>
+
+
+let dataCO2 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const xValues =  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+const xValues2 =  [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,];
+const xValues23 = [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,];//пустой массив меток (30 знач.)
+var g3diff = 0;
+var g2diff = 0;
+
+    //заполнение массива данных ри загрузке страницы
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {	  
+      if (this.readyState == 4 && this.status == 200) {
+		    var myObj = JSON.parse(this.responseText);
+		    for (var i=0;i<=29;i++){
+		      dataCO2[i] = myObj[i]; /*копируем сами данные*/
+		    }
+      }
+    };
+    xhttp.open("GET", "/g0_on", false);  //synchronous request !!!
+    xhttp.send();
+
+//заполнение массивов меток при загрузке страницы
+setLabelsChart3();
+
+//указатель на switch
+var rswitch =document.getElementsByName("radio");
+
+//создаем обьект - график
+var ctx_live = document.getElementById("mycanvas");
+var myChart = new Chart(ctx_live, {
+  type: 'line',
+  data: {
+    labels: xValues,    //метки шкалы X (передается только ссылка xValues)
+    datasets: [{ 
+      data: dataCO2,  //передается только ссылка на массив dataCO2
+      borderColor: "blue",
+      fill: false, //заливка
+      cubicInterpolationMode: 'monotone' //сглаживание углов
+    }]
+  },
+  options: {
+	plugins:  {
+		//animation: false,
+		legend: {display: false,}
+    }    	
+  }
+  
+});
+
+//заполнение массивов с временными метками для графиков==============================================
+function setLabelsChart3() {
+var sec=''; var min='';var hours='';
+
+var cdate = new Date();
+cdate.setHours(cdate.getHours() - 9); //на начало диапазона
+cdate.setMinutes(cdate.getMinutes() + 18);
+cdate.setSeconds(cdate.getSeconds() - g3diff);
+	for (let i =0;i<= 29;i++){
+		min = String(cdate.getMinutes()).padStart(2, '0');
+		hours = String(cdate.getHours());
+		xValues23[i]=hours+":"+min;  //меняем значения массива с метками
+		cdate.setMinutes(cdate.getMinutes() + 18);	
+	}
+
+cdate = new Date();
+cdate.setHours(cdate.getHours() - 1); //на начало диапазона
+cdate.setMinutes(cdate.getMinutes() + 2);
+cdate.setSeconds(cdate.getSeconds() - g2diff);
+	for (let i =0;i<= 29;i++){
+		min = String(cdate.getMinutes()).padStart(2, '0');
+		hours = String(cdate.getHours());
+		xValues2[i]=hours+":"+min;  //меняем значения массива с метками
+		cdate.setMinutes(cdate.getMinutes() + 2);	
+	}
+
+cdate = new Date();
+cdate.setMinutes(cdate.getMinutes() - 2); //на начало диапазона
+cdate.setSeconds(cdate.getSeconds() - 25); //на начало диапазона
+	for (let i =0;i<= 29;i++){
+		sec = String(cdate.getSeconds()).padStart(2, '0');
+		min = String(cdate.getMinutes());
+		xValues[i]=min+"."+sec;  //меняем значения массива с метками
+		cdate.setSeconds(cdate.getSeconds() + 5);	
+	}
+
+
+  //console.log(xValues23);
+}
+
+//панель навигации - обработчик событий
+function navChange(src) {
+  if        ( src.value ==2 ) {
+    setTimeout(() => { 
+      window.location.replace('/wifimanager.html') ; }, 200);
+    
+  } else if ( src.value ==3 ) {
+    setTimeout(() => { 
+      window.location.replace('/calibration.html') ; }, 200);
+    
+  }
+}
+
+//var passed_change = 0;
+
+function handleChange(src) {
+  //passed_change = 4;
+  if        ( src.value ==1 ) {
+			graph_g0();
+  } else if ( src.value ==2 ) {
+			graph_g1();
+  } else if ( src.value ==3 ) {
+			graph_g2();
+  }  
+}
+
+  function graph_g2() {  /*переход на график g2*/
+    var xhttp = new XMLHttpRequest();	
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+            var myObj = JSON.parse(this.responseText);		
+            myChart.data.datasets[0].data = myObj; //передается ссылка на myObj
+
+            document.getElementById("ledstate").innerHTML = "9 hours";
+            myChart.data.labels = xValues23; //шкала X : ссылкf на массив xValues2
+            myChart.update();
+      }
+    };	
+    xhttp.open("GET", "/g2_on", true);
+    xhttp.send();  
+  }
+  function graph_g1() {  /*переход на график g2*/
+    var xhttp = new XMLHttpRequest();	
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+            var myObj = JSON.parse(this.responseText);		
+            myChart.data.datasets[0].data = myObj; //передается ссылка на myObj
+
+            document.getElementById("ledstate").innerHTML = "1 hour";
+            myChart.data.labels = xValues2; //шкала X : ссылкf на массив xValues2
+            myChart.update();
+      }
+    };	
+    xhttp.open("GET", "/g1_on", true);
+    xhttp.send();  
+  }
+  
+  function graph_g0() {  /*переход на график g0*/
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+		        var myObj = JSON.parse(this.responseText);		
+            myChart.data.datasets[0].data = myObj; //передается ссылка на myObj
+
+            document.getElementById("ledstate").innerHTML = "3 min";
+            myChart.data.labels = xValues; //передаем ссылку на массив меток xValues
+            myChart.update();
+      }
+    };
+    xhttp.open("GET", "/g0_on", true);
+    xhttp.send();  
+  }
+
+  setInterval(function ( ) {  /*период 1 сек.*/
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+	  //if (passed_change > 0 ) {passed_change -= 1}
+    if (this.readyState == 4 && this.status == 200) {
+		  var myObj = JSON.parse(this.responseText);
+		  document.getElementById("rssi").innerHTML = myObj.rssi;
+		  document.getElementById("humis").innerHTML = myObj.humis.toFixed(1);
+		  document.getElementById("temps").innerHTML = myObj.temps.toFixed(1);
+		  document.getElementById("co2s").innerHTML = myObj.co2;
+		  document.getElementById("freemem").innerHTML = myObj.freemem;
+		  document.getElementById("iday").innerHTML = myObj.iday;
+		  document.getElementById("ihour").innerHTML = myObj.ihour;  //.padStart(2,"0");
+		  document.getElementById("imin").innerHTML =  String(myObj.imin).padStart(2,"0");
+		  document.getElementById("isec").innerHTML =  String(myObj.isec).padStart(2,"0");
+      g3diff = myObj.g3diff;
+      g2diff = myObj.g2diff;
+      }
+    };
+    xhttp.open("GET", "/jsonstate", true);
+    xhttp.send();
+  }, 1900 ) ;
+  
+
+    setInterval(function ( ) {  /*период 5 сек.*/
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {	  
+      if (this.readyState == 4 && this.status == 200) {
+		    var myObj = JSON.parse(this.responseText);		
+        myChart.data.datasets[0].data = myObj; //принятые данные -> в график
+        setLabelsChart3(); //пересчет значений меток по X координате
+		    myChart.update(); //обновить картинку графика
+      }
+    };
+//В зависимости от положения свича забираем нужные данные для графика 
+if        ( rswitch[0].checked ) {
+    xhttp.open("GET", "/g0_on", true);
+} else if ( rswitch[1].checked ) {
+    xhttp.open("GET", "/g1_on", true);
+} else {
+    xhttp.open("GET", "/g2_on", true);
+}
+    xhttp.send();
+  }, 5200 ) ;
+  
+  
+</script>
+
+
+</html>

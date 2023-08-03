@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>ESP Wi-Fi Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+<div id="nav-panel">
+  <div id="nav-radios-panel">
+    <label class="nav-label" id="nav-llab" for="nav-input1">Sens</label>
+    <input class="nav-inp"  id="nav-input1" name="nav-radio" type="radio"
+          onchange="navChange(this);" value="1"/>
+    <label class="nav-label" for="nav-input2">Manag</label>
+    <input class="nav-inp"  id="nav-input2" name="nav-radio" type="radio" checked/>
+    <label class="nav-label" id="nav-rlab" for="nav-input3">Calibr</label>
+    <input class="nav-inp"  id="nav-input3" name="nav-radio" type="radio"
+          onchange="navChange(this);" value="3" />
+    <span id="nav-slider"></span>
+  </div>
+</div>
+
+    <div class="card-grid">
+      <div class="card">        
+          <p>
+            <label for="ssid">SSID</label>
+            <input type="text" id ="ssid" name="ssid" value="%ssid%"><br>
+            <label for="pass">Password</label>
+            <input type="text" id ="pass" name="pass" value="%pass%"><br>           
+          </p>        
+		      <button type="button" class="wifiman" onclick="post_form()">Save</button>
+      </div>
+    </div>	
+  <p>
+     <a href="/update">Update Firmware and Filesystem</a><br><br>
+     <a href="/status">ModBus Debug Info</a><br><br>
+     <a href="/reboot" class="reboot">Reboot</a>
+  </p>
+
+</body>
+<script>
+
+function navChange(src) {
+  if        ( src.value ==1 ) {
+    setTimeout(() => { 
+        window.location.replace('/') ;}, 200);
+
+  } else if ( src.value ==3 ) {
+    setTimeout(() => { 
+        window.location.replace('/calibration.html') ;}, 200);
+  }
+}
+
+
+function post_form(){
+
+let postObj = { 
+    ssid: document.getElementById('ssid').value, 
+    pass: document.getElementById('pass').value
+}
+let post = JSON.stringify(postObj)
+
+fetch("/posts", {
+    method: 'post',
+    body: post,
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+// (C) RETURN SERVER RESPONSE AS TEXT
+.then((res) => {
+   if (res.status != 200) { throw new Error("Bad Server Response"); }
+   return res.text();
+})
+// (D) SERVER RESPONSE
+.then((res) => {
+    console.log(res);
+	alert(res);
+})
+// (E) HANDLE ERRORS - OPTIONAL
+.catch((error) => {
+    console.log(error)
+});
+// (F) PREVENT FORM SUBMIT
+return false;
+}
+
+</script>
+</html>
