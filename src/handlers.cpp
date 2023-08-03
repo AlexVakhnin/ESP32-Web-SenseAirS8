@@ -39,10 +39,10 @@ if (flagACKres) {
 if (flagCalibr){
   //была команда калибровки фоном
   ack_reset();
-  //calibration(); //debug -> (в реале разремить..)
+  calibration(); //debug -> (в реале разремить..)
   delay(2000);
   flagCalibr = false;
-  ack_reg = 32;  //debug -> (в реале заремить..)
+  //ack_reg = 32;  //debug -> (в реале заремить..)
   
 } else {
   //штатный режим опроса
