@@ -6,4 +6,4 @@ SSD-1306
 #
 ### Links  
 **Schematic:** [ESP32_SenseAirS8_schem.png](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/ESP32_SenseAirS8_schem.png)
-**Breadboard:** [ESP32_SenseAirS8_bb.png]()
+**Breadboard:** [ESP32_SenseAirS8_bb.png](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/ESP32_SenseAirS8_bb.png)
