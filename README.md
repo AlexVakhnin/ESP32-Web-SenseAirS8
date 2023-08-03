@@ -2,7 +2,7 @@
 + **Electrical circuit elements: ESP32-DEVKIT-V3, SenseAir S8, DHT22, SSD-1306 display**
 + **SenseAir S8: good stable CO2 sensor with ModBus comunication protocol**
 + **DHT22: Temperature/ Humidity Sensor**
-+ **Display of graphs and calibration CO2 sensor using a graphical WEB interface**
++ **Display of graphs and calibration CO2 sensor using a dynamical WEB interface**
 #
 ### Links  
 **Schematic:** [ESP32_SenseAirS8_schem.png](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/ESP32_SenseAirS8_schem.png)
