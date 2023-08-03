@@ -1,6 +1,6 @@
 # CO2 monitoring project on PlatformIO Arduino
 + **Electrical circuit elements: ESP32-DEVKIT-V3, SenseAir S8, DHT22, SSD-1306 display**
-+ **SenseAir S8: good stable CO2 sensor with ModBus comunication protocol**
++ **SenseAir S8: infrared CO2 sensor with ModBus comunication protocol**
 + **DHT22: Temperature/ Humidity Sensor**
 + **Display of graphs and calibration CO2 sensor using a dynamical WEB interface**
 #
