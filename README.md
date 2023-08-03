@@ -1,4 +1,4 @@
-# ESP32-Web-SenseAirS8 Platformio-Arduino
+# ESP32 with SenseAirS8 project Platformio-Arduino
 ESP32-DEVKIT-V3
 SenseAir-S8
 DHT22
