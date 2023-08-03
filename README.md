@@ -10,4 +10,4 @@ SSD-1306
 **Breadboard:** [ESP32_SenseAirS8_bb.png](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/ESP32_SenseAirS8_bb.png)
 
 **Display:** [Display.jpg](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/Display.jpg)
-**WEB:** [Display.jpg](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/Display.jpg)
+**WEB:** [Web.png](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/Web.png)
