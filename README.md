@@ -5,4 +5,4 @@ DHT22
 SSD-1306
 #
 ### Links  
-**Schematic:** [ups-schematic.png](https://github.com/AlexVakhnin/ups-raspberrypi/blob/main/ups-schematic.png)
+**Schematic:** [ESP32_SenseAirS8_schem.png](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/ESP32_SenseAirS8_schem.png)
