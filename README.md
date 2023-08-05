@@ -14,4 +14,4 @@
 
 **SenseAir-S8 ModBus protocol:** [TDE2067.pdf](https://rmtplusstoragesenseair.blob.core.windows.net/docs/Dev/publicerat/TDE2067.pdf)
 
-![Dysplay]([Diaplay.jpg](blob/main/Display.jpg)
+![Dysplay](blob/main/Display.jpg)
