@@ -5,11 +5,11 @@
 + **Display of graphs and calibration CO2 sensor using a dynamical WEB interface**
 #
 ### Links  
-**Schematic:** [ESP32_SenseAirS8_schem.png](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/ESP32_SenseAirS8_schem.png)
+**Schematic:** [ESP32_SenseAirS8_schem.png](/Help/ESP32_SenseAirS8_schem.png)
 
-**Breadboard:** [ESP32_SenseAirS8_bb.png](https://github.com/AlexVakhnin/ESP32-Web-SenseAirS8/blob/main/ESP32_SenseAirS8_bb.png)
+**Breadboard:** [ESP32_SenseAirS8_bb.png](/Help/ESP32_SenseAirS8_bb.png)
 
 **SenseAir-S8 ModBus protocol:** [TDE2067.pdf](https://rmtplusstoragesenseair.blob.core.windows.net/docs/Dev/publicerat/TDE2067.pdf)
 
 ![Dysplay](/Help/Display.jpg)
-![Web](/Web.png)
+![Web](/Help/Web.png)
